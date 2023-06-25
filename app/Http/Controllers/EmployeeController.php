@@ -17,12 +17,6 @@ class EmployeeController extends Controller
     {
         $pageTitle = 'Employee List';
 
-        // USING QUERY BUILDER
-        // $employees = DB::table('employees')
-        // ->select('*', 'employees.id as employee_id', 'positions.name as position_name')
-        // ->leftJoin('positions','employees.position_id', '=', 'positions.id')
-        // ->get();
-
         // ELOQUENT
         $employees = Employee::all();
 
@@ -30,6 +24,12 @@ class EmployeeController extends Controller
             'pageTitle' => $pageTitle,
             'employees' => $employees
         ]);
+
+        // USING QUERY BUILDER
+        // $employees = DB::table('employees')
+        // ->select('*', 'employees.id as employee_id', 'positions.name as position_name')
+        // ->leftJoin('positions','employees.position_id', '=', 'positions.id')
+        // ->get();
     }
 
     /**
@@ -39,15 +39,15 @@ class EmployeeController extends Controller
     {
         $pageTitle = 'Create Employee';
 
-        // USING QUERY BUILDER
-        // $positions = DB::table('positions')
-        //              ->select('*')
-        //              ->get();
-
         // ELOQUENT
         $positions = Position::all();
 
         return view('employee.create', compact('pageTitle', 'positions'));
+
+        // USING QUERY BUILDER
+        // $positions = DB::table('positions')
+        //              ->select('*')
+        //              ->get();
     }
 
     /**
@@ -112,17 +112,17 @@ class EmployeeController extends Controller
     {
         $pageTitle = 'Employee Detail';
 
+        // ELOQUENT
+        $employee = Employee::find($id);
+
+        return view('employee.show', compact('pageTitle', 'employee'));
+
         // USING QUERY BUILDER
         // $employee = DB::table('employees')
         //             ->select('*', 'employees.id as employee_id', 'positions.name as position_name')
         //             ->leftJoin('positions', 'employees.position_id', '=', 'positions.id')
         //             ->where('employees.id', '=', $id)
         //             ->first();
-
-        // ELOQUENT
-        $employee = Employee::find($id);
-
-        return view('employee.show', compact('pageTitle', 'employee'));
     }
 
     /**
@@ -131,6 +131,13 @@ class EmployeeController extends Controller
     public function edit(string $id)
     {
         $pageTitle = 'Edit Data Employee';
+
+        // ELOQUENT
+        $positions = Position::all();
+        $employee = Employee::find($id);
+
+        //render view with post
+        return view('employee.edit', compact('pageTitle', 'employee', 'positions'));
 
         // $employee = DB::table('employees')
         //             ->select('*', 'employees.id as employee_id', 'positions.name as position_name')
@@ -141,13 +148,6 @@ class EmployeeController extends Controller
         // $positions = DB::table('positions')
         //             ->select('*')
         //             ->get();
-
-        // ELOQUENT
-        $positions = Position::all();
-        $employee = Employee::find($id);
-
-        //render view with post
-        return view('employee.edit', compact('pageTitle', 'employee', 'positions'));
     }
 
     /**
@@ -201,15 +201,15 @@ class EmployeeController extends Controller
      */
     public function destroy(string $id)
     {
-        // QUERY BUILDER
-        // DB::table('employees')
-        // ->where('id', $id)
-        // ->delete();
-
         // ELOQUENT
         Employee::find($id)->delete();
 
         return redirect()->route('employees.index');
+
+        // QUERY BUILDER
+        // DB::table('employees')
+        // ->where('id', $id)
+        // ->delete();
     }
 
 }
